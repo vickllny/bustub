@@ -28,17 +28,21 @@ auto Trie::Get(std::string_view key) const -> const T * {
     char *c = index(key_it, 0);
     auto c1 = children.find(*c);
     if(c1 != children.end()){
-      auto node = c1->second;
       if(key_it == key.end()){
-        if(node == )
+        auto node = c1->second;
+        if(node->is_value_node_){
+          //TODO ERROR
+          auto* r_node = dynamic_cast<TrieNodeWithValue<T>*>(node.get());
+          return r_node ? r_node : nullptr;
+        }
+        return nullptr;
       }
-
       children = c1->second->children_;
-      continue ;
     }
   }
   return nullptr;
 }
+
 
 template <class T>
 auto Trie::Put(std::string_view key, T value) const -> Trie {
